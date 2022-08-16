@@ -3,10 +3,17 @@
 </p>
 
 # Aluguel de Veículos
-## Este é um projeto elaborado seguindo a Programação Orientada a Objetos em Java
+### Esta é uma aplicação elaborada seguindo a Programação Orientada a Objetos em Java. Foi idealizada para alugar veículos mantendo registros das datas de retirada/saída e também das transações.
 
 <br><br><br>
 ### Features
 
 + Interface (console)
 + 
+
+
+<br><br><br>
+### UML
+
+![UML](https://user-images.githubusercontent.com/61806906/184899852-8fa66756-6f46-43a6-a727-b184e74f929f.jpg)
+
