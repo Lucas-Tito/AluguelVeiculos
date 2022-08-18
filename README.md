@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://atlas-content-cdn.pixelsquid.com/stock-images/luxury-crossover-generic-suv-rAolN22-600.jpg" alt="header"/>
+  <img src="https://atlas-content-cdn.pixelsquid.com/stock-images/luxury-crossover-generic-suv-rAolN22-600.jpg" alt="header" width="35%" height="35%"/>
 </p>
 
 # Aluguel de Veículos
