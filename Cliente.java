@@ -4,7 +4,7 @@ class Cliente{
   private String tipoCarteira;
   private Conta conta;
   private int carroAlugado;   //recebe o id do veículo que o cliente alugou se não há nenhum carro alugado o atributo recebe -1 (*mudar nome para veiculoAlugado)
-  private boolean hasReboque; //mudar nome para hasSeguro
+  private boolean hasSeguro; 
                           
 
   Cliente(String nome, int idade, String tipo){
@@ -15,14 +15,14 @@ class Cliente{
     this.carroAlugado = -1;
   }
 
-  Cliente(String nome, int idade, String tipo, int idCarro, boolean hasReboque,float saldo){  //construtor usado pela fileDataToArray() para colocar os dados do arquivo txt para dentro do vetor
+  Cliente(String nome, int idade, String tipo, int idCarro, boolean hasSeguro,float saldo){  //construtor usado pela fileDataToArray() para colocar os dados do arquivo txt para dentro do vetor
     this.nome = nome;
     this.idade = idade;
     this.tipoCarteira = tipo;
     this.conta = new Conta();
     this.conta.setSaldo(saldo);
     this.carroAlugado = idCarro;
-    this.hasReboque = hasReboque;
+    this.hasSeguro = hasSeguro;
   }
 
   public String getNome(){
@@ -62,18 +62,18 @@ class Cliente{
   }
 
   public boolean getReboque(){
-    return hasReboque;
+    return hasSeguro;
   }
   
   public void setReboque(boolean estado){
-    this.hasReboque = estado;
+    this.hasSeguro = estado;
   }
 
   public String toString(){
 
     String show = "-" + nome +" ["+ "idade: " +idade +"| carteira: "+ tipoCarteira  + "| saldo: " + conta + " Seguro: ";
 
-    if(hasReboque)
+    if(hasSeguro)
       show += "sim]";
     else
       show+= "não]";

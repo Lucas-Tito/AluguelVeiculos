@@ -48,8 +48,7 @@ class Gerencia {
       System.out.println("fail: tipo de carteira inválido");
 
     else{
-      //padroniza o tipo como maiúsculo
-      clientToAdd.setTipo(clientToAdd.getTipo().toUpperCase()); 
+      clientToAdd.setTipo(clientToAdd.getTipo().toUpperCase()); //padroniza o tipo como maiúsculo
       clientes.add(clientToAdd);
       CliWriter();//escreve o cliente no txt
     }
@@ -374,6 +373,7 @@ public void diariaUpdate(){
     
   }
   
+                    //WILL BE REMOVED
   public void CliWriter(){
     for(Cliente c : clientes){           
       try (
@@ -474,7 +474,7 @@ public void diariaUpdate(){
     return idExists;
   }
 
-
+              //WILL BE REMOVED
   public void updateCli(){
     File novo = new File("novo.txt");
     for(Cliente c : clientes){
@@ -504,7 +504,7 @@ public void diariaUpdate(){
     novo.renameTo(new File("clientes.txt"));
   }
 
-
+          //WILL BE REMOVED
   public void updateVeic(){
 
     File novo = new File("novo.txt");
@@ -534,6 +534,7 @@ public void diariaUpdate(){
     novo.renameTo(new File("veiculos.txt"));
     
   }
+              //WILL BE REMOVED
   public void VeicWriter(){
     for(Veiculo v : veiculos){
       
