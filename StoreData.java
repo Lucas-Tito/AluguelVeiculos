@@ -68,5 +68,36 @@ class StoreData{
   }
 
 
+  public void updateIds(){
+    boolean cliModified = false;
+    boolean veicModified = false;
+
+    for(int i =0; i<veiculos.size(); i++){
+
+      if(veiculos.get(i).getIsAlugado() == true){
+        for(int j=0; j<clientes.size(); j++){
+          if(clientes.get(i).getIdCarroAlugado() == veiculos.get(i).getId()){
+            cliModified = true;
+            veicModified = true;
+            clientes.get(i).setIdCarroAlugado(i);
+            veiculos.get(i).setId(i);
+          }
+        }
+      }
+      else{
+        cliModified = true;
+        veiculos.get(i).setId(i);
+      }
+
+    }
+    if(cliModified)
+      updateCli();
+    if(veicModified)  
+      updateVeic();
+
+  }
+}
+
+
 
 }
