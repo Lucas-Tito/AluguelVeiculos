@@ -12,7 +12,9 @@ class Main {
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
     Gerencia g = new Gerencia();
-    fileDataToArray(g.getClientes(),g.getVeiculos());
+    StoreData mngData = new StoreData();
+    mngData.fileDataToArray(g.getClientes(),g.getVeiculos());
+
     while (true) {
         String line = scanner.nextLine();
         System.out.println("$" + line);
@@ -55,53 +57,55 @@ class Main {
     scanner.close();
   }
 
-  public static void fileDataToArray(ArrayList<Cliente> clientesIn,ArrayList<Veiculo> veiculosIn){//arquivo pro array
-    File fileCli = new File("clientes.txt");
+  
+                //will be removed
+//   public static void fileDataToArray(ArrayList<Cliente> clientesIn,ArrayList<Veiculo> veiculosIn){//arquivo pro array
+//     File fileCli = new File("clientes.txt");
 
-    try (Scanner clientStream = new Scanner(fileCli);){
-          while(clientStream.hasNext()) { 
-            String nome = clientStream.next();
-            int idade = clientStream.nextInt();
-            String tipo = clientStream.next();
-            int idCarro = clientStream.nextInt();
-            boolean hasReboque = clientStream.nextBoolean();
-            String saldo = clientStream.next();           
+//     try (Scanner clientStream = new Scanner(fileCli);){
+//           while(clientStream.hasNext()) { 
+//             String nome = clientStream.next();
+//             int idade = clientStream.nextInt();
+//             String tipo = clientStream.next();
+//             int idCarro = clientStream.nextInt();
+//             boolean hasReboque = clientStream.nextBoolean();
+//             String saldo = clientStream.next();           
             
-            clientesIn.add(new Cliente(nome, idade, tipo, idCarro, hasReboque, Float.valueOf(saldo)));
-            clientStream.nextLine(); // clear buffer before next readLine
-          }
-    }
-        catch(InputMismatchException e) {
-          System.out.println("Invalid Input");
-        }
-        catch(FileNotFoundException e) {
-          System.out.println("\nAviso: Não há dados de cliente");
-        }
+//             clientesIn.add(new Cliente(nome, idade, tipo, idCarro, hasReboque, Float.valueOf(saldo)));
+//             clientStream.nextLine(); // clear buffer before next readLine
+//           }
+//     }
+//         catch(InputMismatchException e) {
+//           System.out.println("Invalid Input");
+//         }
+//         catch(FileNotFoundException e) {
+//           System.out.println("\nAviso: Não há dados de cliente");
+//         }
         
-        File fileVeic = new File("veiculos.txt");
+//         File fileVeic = new File("veiculos.txt");
 
-    try (Scanner veicStream = new Scanner(fileVeic);){
+//     try (Scanner veicStream = new Scanner(fileVeic);){
 
-      while(veicStream.hasNext()) { 
-        int id = veicStream.nextInt();
-        String tipo = veicStream.next();
-        String nome = veicStream.next();
-        String diaria = veicStream.next();
-        boolean alugado = veicStream.nextBoolean();           
+//       while(veicStream.hasNext()) { 
+//         int id = veicStream.nextInt();
+//         String tipo = veicStream.next();
+//         String nome = veicStream.next();
+//         String diaria = veicStream.next();
+//         boolean alugado = veicStream.nextBoolean();           
             
-        if(tipo.equals("moto")|| tipo.equals("Moto"))
-          veiculosIn.add(new Moto(id, nome, Float.valueOf(diaria), alugado));
-        else
-          veiculosIn.add(new Carro(id, nome, Float.valueOf(diaria), alugado));
+//         if(tipo.equals("moto")|| tipo.equals("Moto"))
+//           veiculosIn.add(new Moto(id, nome, Float.valueOf(diaria), alugado));
+//         else
+//           veiculosIn.add(new Carro(id, nome, Float.valueOf(diaria), alugado));
 
-          veicStream.nextLine(); // clear buffer before next readLine
-      }
-    }
-    catch(InputMismatchException e){
-      System.out.println("Invalid Input");
-    }
-    catch(FileNotFoundException e){
-      System.out.println("\nAviso: Não há dados de veículo");
-    }
-  }
+//           veicStream.nextLine(); // clear buffer before next readLine
+//       }
+//     }
+//     catch(InputMismatchException e){
+//       System.out.println("Invalid Input");
+//     }
+//     catch(FileNotFoundException e){
+//       System.out.println("\nAviso: Não há dados de veículo");
+//     }
+//   }
 }
