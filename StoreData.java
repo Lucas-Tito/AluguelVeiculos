@@ -8,11 +8,92 @@ import java.util.InputMismatchException;
 import java.io.FileNotFoundException;
 import java.io.File;
 
+
+
 class StoreData{
+
+  File fileCli = new File("clientes.txt");
+  File fileVeic = new File("veiculos.txt");
+
+
+
+   public boolean nameExists (String nomeToSearch){
+    
+    boolean nameExists = false;
+
+    try (
+          /* now create a Scanner object to wrap around carFile
+          this allows us to user high-level functions such as nextLine */
+          Scanner clientStream = new Scanner(fileCli);
+        )
+      {
+        while(clientStream.hasNext()) { 
+        String nome = clientStream.next();
+        String idade = clientStream.next();
+        String tipo = clientStream.next();
+        String idCarro = clientStream.next();
+        String hasReboque = clientStream.next();
+        String saldo = clientStream.next(); 
+
+        if(nome.equals(nomeToSearch)){
+          nameExists = true;
+            break;
+        }             
+      clientStream.nextLine(); // clear buffer before next readLine
+        }
+      }
+      catch(InputMismatchException e){
+        System.out.println("Invalid Input");
+      }
+      catch(FileNotFoundException e){
+        //System.out.println("\nAviso: Não há dados de cliente");
+      }
+
+    return nameExists;
+  }
+
+
+
+  public boolean idExists (int idToSearch){
+    
+      boolean idExists = false;
+  
+      try (
+            /* now create a Scanner object to wrap around carFile
+            this allows us to user high-level functions such as nextLine */
+            Scanner veicStream = new Scanner(fileVeic);
+              )
+        {
+          while(veicStream.hasNext()) { 
+  
+            int id = veicStream.nextInt();
+            String tipo = veicStream.nextLine();
+            String nome = veicStream.nextLine();
+            String diaria = veicStream.nextLine();
+            String alugado = veicStream.nextLine();
+  
+            if(id == idToSearch){
+              idExists = true;
+              break;
+            }             
+  
+            veicStream.nextLine(); // clear buffer before next readLine
+            }
+          }
+          catch(InputMismatchException e){
+            System.out.println("Invalid Input");
+          }
+          catch(FileNotFoundException e){
+            //System.out.println("\nAviso: Não há dados de veículo");
+          }
+  
+      return idExists;
+    }
+
 
   public void CliWriter(ArrayList<Cliente> clientesToWrite){
 
-    for(Cliente c : clientes){           
+    for(Cliente c : clientesToWrite){           
       try (
           FileWriter fstream = new FileWriter(fileCli, StandardCharsets.UTF_8, true);
           PrintWriter outputFile = new PrintWriter(fstream, true); // using autoflushing
@@ -40,8 +121,8 @@ class StoreData{
   }
 
 
-    public void VeicWriter(){
-    for(Veiculo v : veiculos){
+    public void VeicWriter(ArrayList<Veiculo> veicsToWrite){
+    for(Veiculo v : veicsToWrite){
       
       try (
             FileWriter fstream = 
@@ -68,7 +149,69 @@ class StoreData{
   }
 
 
-  public void updateIds(){
+  public void updateCli(ArrayList<Cliente> clientesToUpdate){
+    File novo = new File("novo.txt");
+    for(Cliente c : clientesToUpdate){
+           
+    try (
+          FileWriter fstream = 
+          new FileWriter(novo, StandardCharsets.UTF_8, true);
+          PrintWriter outputFile = 
+          new PrintWriter(fstream, true); // using autoflushing
+        )
+        {        
+          outputFile.println(c.getNome()); 
+          outputFile.println(c.getIdade());
+          outputFile.println(c.getTipo());
+          outputFile.println(c.getIdCarroAlugado());
+          outputFile.println(c.getReboque());
+          outputFile.println(c.getConta().getSaldo());            
+        }
+        catch(InputMismatchException e) {
+          System.err.println("Invalid input: " + e.getMessage());
+        }
+        catch(IOException e) {
+          System.out.println("Error opening the file: " + e.getMessage());
+        }
+    }
+    fileCli.delete();
+    novo.renameTo(new File("clientes.txt"));
+  }
+
+
+  public void updateVeic(ArrayList<Veiculo> veicsToUpdate){
+
+    File novo = new File("novo.txt");
+    for(Veiculo c : veicsToUpdate){
+           
+      try(
+            FileWriter fstream = 
+            new FileWriter(novo, StandardCharsets.UTF_8, true);
+            PrintWriter outputFile = 
+              new PrintWriter(fstream, true); // using autoflushing
+          )
+        {          
+          outputFile.println(c.getId());
+          outputFile.println(c.getTipo()); 
+          outputFile.println(c.getNome());
+          outputFile.println(c.getDiaria());
+          outputFile.println(c.getIsAlugado());    
+        }
+        catch(InputMismatchException e) {
+          System.err.println("Invalid input: " + e.getMessage());
+        }
+        catch(IOException e) {
+          System.out.println("Error opening the file: " + e.getMessage());
+        }
+    }
+    fileVeic.delete();
+    novo.renameTo(new File("veiculos.txt"));
+    
+  }
+ 
+
+
+  public void updateIds(ArrayList<Veiculo> veiculos, ArrayList<Cliente> clientes){
     boolean cliModified = false;
     boolean veicModified = false;
 
@@ -91,13 +234,12 @@ class StoreData{
 
     }
     if(cliModified)
-      updateCli();
+      updateCli(clientes);
     if(veicModified)  
-      updateVeic();
+     updateVeic(veiculos);
 
   }
 }
 
 
 
-}

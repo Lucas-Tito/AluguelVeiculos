@@ -11,12 +11,15 @@ import java.io.File;
 class Gerencia {
   ArrayList<Cliente> clientes = new ArrayList<>();
   ArrayList<Veiculo> veiculos = new ArrayList<>();
+  StoreData mngData = new StoreData();
+  File fileCli = new File("clientes.txt");
+  File fileVeic = new File("veiculos.txt");
   int nextVehicleId = 0;
   String escolha;
 
   Scanner scanner = new Scanner(System.in);
-  File fileCli = new File("clientes.txt");
-  File fileVeic = new File("veiculos.txt");
+  // File fileCli = new File("clientes.txt");
+  // File fileVeic = new File("veiculos.txt");
 
   public ArrayList<Cliente> getClientes(){
     return clientes;
@@ -38,7 +41,7 @@ class Gerencia {
             clientToAdd.getTipo().equals("ab") ||
             clientToAdd.getTipo().equals("AB");
     
-    if(nameExists(clientToAdd.getNome()))
+    if(mngData.nameExists(clientToAdd.getNome()))
       System.out.println("fail: cliente já cadastrado");
 
     else if(clientToAdd.getIdade() < 18)
@@ -50,7 +53,7 @@ class Gerencia {
     else{
       clientToAdd.setTipo(clientToAdd.getTipo().toUpperCase()); //padroniza o tipo como maiúsculo
       clientes.add(clientToAdd);
-      CliWriter();//escreve o cliente no txt
+      mngData.CliWriter(clientes);//escreve o cliente no txt
     }
 } 
   //Remove o primeiro cliente com nome igual ao contido em clientToRemove  
@@ -61,7 +64,8 @@ class Gerencia {
 
       clientes.remove(indiceCli);
       System.out.println("Removido com sucesso!");
-      updateCli();//deixa o txt de clientes igual ao vetor
+      mngData.updateCli(clientes);  //deixa o txt de clientes igual ao vetor
+      
     }
     else
       System.out.println("fail: cliente inexistente");
@@ -89,7 +93,7 @@ class Gerencia {
         System.out.print("Digite o novo nome: ");
         String nomeNovo = scanner.nextLine();
         clientes.get(indiceCli).setName(nomeNovo);
-        updateCli();
+        mngData.updateCli(clientes);
       }
       else if(opcao == 2){
 
@@ -97,7 +101,7 @@ class Gerencia {
         System.out.print("Digite a nova idade: ");
         int idadeToEdit = scanner.nextInt();
         clientes.get(indiceCli).setIdade(idadeToEdit);
-        updateCli();
+        mngData.updateCli(clientes);
 
       }
       else if(opcao == 3){
@@ -106,7 +110,7 @@ class Gerencia {
         System.out.print("Digite o novo tipoCarteira: ");
         String tipoNovo = scanner.nextLine();   
         clientes.get(indiceCli).setTipo(tipoNovo);
-        updateCli();
+        mngData.updateCli(clientes);
       }
       else
         System.out.println("fail: input inválido");    
@@ -136,11 +140,11 @@ class Gerencia {
     //escreve veículo no txt se o tipo passado for válido
     if(tipoToAdd.equals("moto") || tipoToAdd.equals("Moto")){
       veiculos.add(new Moto(veichileId, nomeToAdd, diariaToAdd));
-      VeicWriter();
+      mngData.VeicWriter(veiculos);
    } 
     else if(tipoToAdd.equals("carro") || tipoToAdd.equals("Carro")){
       veiculos.add(new Carro(veichileId, nomeToAdd, diariaToAdd));
-      VeicWriter();
+      mngData.VeicWriter(veiculos);
     }
     else
       System.out.println("fail: tipo inválido");
@@ -154,7 +158,7 @@ class Gerencia {
     if(indiceVeic != -1){
       veiculos.remove(indiceVeic);
       System.out.println("Removido com sucesso!");
-      updateVeic();
+      mngData.updateVeic(veiculos);
     }
     else
       System.out.println("fail: veículo inexistente");       
@@ -182,7 +186,7 @@ class Gerencia {
         System.out.print("Digite o novo nome: ");
         String nomeNovo = scanner.nextLine();
         veiculos.get(indiceVeic).setNome(nomeNovo);
-        updateVeic();
+        mngData.updateVeic(veiculos);
 
       }
       else if(opcao == 2){
@@ -191,7 +195,7 @@ class Gerencia {
         System.out.print("Digite a nova diaria: ");
         int novaDiaria = scanner.nextInt();
         veiculos.get(indiceVeic).setDiaria(novaDiaria);
-        updateVeic();
+        mngData.updateVeic(veiculos);
       }
       else
         System.out.println("fail: input inválido");
@@ -251,8 +255,8 @@ public void aluga(String nome, int idCarro, boolean isReboque){
                   clientes.get(indiceCliente).setReboque(true);
               }
           
-            updateVeic();
-            updateCli();
+            mngData.updateVeic(veiculos);
+            mngData.updateCli(clientes);
             }
 
           else
@@ -283,7 +287,7 @@ public void depositar(String nome, float saldo){
     int indiceCli = searchCli(nome);
     if(indiceCli != -1){
       clientes.get(indiceCli).getConta().setSaldo(saldo);
-      updateCli();
+      mngData.updateCli(clientes);
     }
     else
       System.out.println("fail: cliente inexistente");
@@ -302,7 +306,7 @@ public void diariaUpdate(){
         clientes.get(i).getConta().setSaldo(-15);  
     
       clientes.get(i).getConta().setSaldo(veiculos.get(indiceVeic).getDiaria()*-1);   //realiza a cobrança
-      updateCli();
+      mngData.updateCli(clientes);
     }
  }
 
@@ -367,201 +371,201 @@ public void diariaUpdate(){
     else{
     clientes.get(indiceCli).setIdCarroAlugado(-1);
     veiculos.get(indiceVeic).setIsAlugado(false);
-    updateCli();
-    updateVeic();
+    mngData.updateCli(clientes);
+    mngData.updateVeic(veiculos);
     }  
     
   }
   
                     //WILL BE REMOVED
-  public void CliWriter(){
-    for(Cliente c : clientes){           
-      try (
-          FileWriter fstream = new FileWriter(fileCli, StandardCharsets.UTF_8, true);
-        PrintWriter outputFile = new PrintWriter(fstream, true); // using autoflushing
-          )
-        {
-          if(!nameExists(c.getNome())){
+  // public void CliWriter(){
+  //   for(Cliente c : clientes){           
+  //     try (
+  //         FileWriter fstream = new FileWriter(fileCli, StandardCharsets.UTF_8, true);
+  //       PrintWriter outputFile = new PrintWriter(fstream, true); // using autoflushing
+  //         )
+  //       {
+  //         if(!nameExists(c.getNome())){
               
-            outputFile.println(c.getNome()); 
-            outputFile.println(c.getIdade());
-            outputFile.println(c.getTipo());
-            outputFile.println(c.getIdCarroAlugado());
-            outputFile.println(c.getReboque());
-            outputFile.println(c.getConta().getSaldo());
+  //           outputFile.println(c.getNome()); 
+  //           outputFile.println(c.getIdade());
+  //           outputFile.println(c.getTipo());
+  //           outputFile.println(c.getIdCarroAlugado());
+  //           outputFile.println(c.getReboque());
+  //           outputFile.println(c.getConta().getSaldo());
               
-          }       
-        }
-        catch(InputMismatchException e) {
-          System.err.println("Invalid input: " + e.getMessage());
-        }
-        catch(IOException e) {
-          System.out.println("Error opening the file: " + e.getMessage());
-        }
-    }
-  }
+  //         }       
+  //       }
+  //       catch(InputMismatchException e) {
+  //         System.err.println("Invalid input: " + e.getMessage());
+  //       }
+  //       catch(IOException e) {
+  //         System.out.println("Error opening the file: " + e.getMessage());
+  //       }
+  //   }
+  // }
 
-
-  public boolean nameExists (String nomeToSearch){
+          //WILL BE DELETED
+  // public boolean nameExists (String nomeToSearch){
     
-    boolean nameExists = false;
+  //   boolean nameExists = false;
 
-    try (
-          /* now create a Scanner object to wrap around carFile
-          this allows us to user high-level functions such as nextLine */
-          Scanner clientStream = new Scanner(fileCli);
-        )
-      {
-        while(clientStream.hasNext()) { 
-        String nome = clientStream.next();
-        String idade = clientStream.next();
-        String tipo = clientStream.next();
-        String idCarro = clientStream.next();
-        String hasReboque = clientStream.next();
-        String saldo = clientStream.next(); 
+  //   try (
+  //         /* now create a Scanner object to wrap around carFile
+  //         this allows us to user high-level functions such as nextLine */
+  //         Scanner clientStream = new Scanner(fileCli);
+  //       )
+  //     {
+  //       while(clientStream.hasNext()) { 
+  //       String nome = clientStream.next();
+  //       String idade = clientStream.next();
+  //       String tipo = clientStream.next();
+  //       String idCarro = clientStream.next();
+  //       String hasReboque = clientStream.next();
+  //       String saldo = clientStream.next(); 
 
-        if(nome.equals(nomeToSearch)){
-          nameExists = true;
-            break;
-        }             
-      clientStream.nextLine(); // clear buffer before next readLine
-        }
-      }
-      catch(InputMismatchException e){
-        System.out.println("Invalid Input");
-      }
-      catch(FileNotFoundException e){
-        //System.out.println("\nAviso: Não há dados de cliente");
-      }
+  //       if(nome.equals(nomeToSearch)){
+  //         nameExists = true;
+  //           break;
+  //       }             
+  //     clientStream.nextLine(); // clear buffer before next readLine
+  //       }
+  //     }
+  //     catch(InputMismatchException e){
+  //       System.out.println("Invalid Input");
+  //     }
+  //     catch(FileNotFoundException e){
+  //       //System.out.println("\nAviso: Não há dados de cliente");
+  //     }
 
-    return nameExists;
-  }
+  //   return nameExists;
+  // }
 
-
-  public boolean idExists (int idToSearch){
+  //will be deleted
+  // public boolean idExists (int idToSearch){
     
-    boolean idExists = false;
+  //   boolean idExists = false;
 
-    try (
-          /* now create a Scanner object to wrap around carFile
-          this allows us to user high-level functions such as nextLine */
-          Scanner veicStream = new Scanner(fileVeic);
-            )
-      {
-        while(veicStream.hasNext()) { 
+  //   try (
+  //         /* now create a Scanner object to wrap around carFile
+  //         this allows us to user high-level functions such as nextLine */
+  //         Scanner veicStream = new Scanner(fileVeic);
+  //           )
+  //     {
+  //       while(veicStream.hasNext()) { 
 
-          int id = veicStream.nextInt();
-          String tipo = veicStream.nextLine();
-          String nome = veicStream.nextLine();
-          String diaria = veicStream.nextLine();
-          String alugado = veicStream.nextLine();
+  //         int id = veicStream.nextInt();
+  //         String tipo = veicStream.nextLine();
+  //         String nome = veicStream.nextLine();
+  //         String diaria = veicStream.nextLine();
+  //         String alugado = veicStream.nextLine();
 
-          if(id == idToSearch){
-            idExists = true;
-            break;
-          }             
+  //         if(id == idToSearch){
+  //           idExists = true;
+  //           break;
+  //         }             
 
-          veicStream.nextLine(); // clear buffer before next readLine
-          }
-        }
-        catch(InputMismatchException e){
-          System.out.println("Invalid Input");
-        }
-        catch(FileNotFoundException e){
-          //System.out.println("\nAviso: Não há dados de veículo");
-        }
+  //         veicStream.nextLine(); // clear buffer before next readLine
+  //         }
+  //       }
+  //       catch(InputMismatchException e){
+  //         System.out.println("Invalid Input");
+  //       }
+  //       catch(FileNotFoundException e){
+  //         //System.out.println("\nAviso: Não há dados de veículo");
+  //       }
 
-    return idExists;
-  }
+  //   return idExists;
+  // }
 
               //WILL BE REMOVED
-  public void updateCli(){
-    File novo = new File("novo.txt");
-    for(Cliente c : clientes){
+  // public void updateCli(){
+  //   File novo = new File("novo.txt");
+  //   for(Cliente c : clientes){
            
-    try (
-          FileWriter fstream = 
-          new FileWriter(novo, StandardCharsets.UTF_8, true);
-          PrintWriter outputFile = 
-          new PrintWriter(fstream, true); // using autoflushing
-        )
-        {        
-          outputFile.println(c.getNome()); 
-          outputFile.println(c.getIdade());
-          outputFile.println(c.getTipo());
-          outputFile.println(c.getIdCarroAlugado());
-          outputFile.println(c.getReboque());
-          outputFile.println(c.getConta().getSaldo());            
-        }
-        catch(InputMismatchException e) {
-          System.err.println("Invalid input: " + e.getMessage());
-        }
-        catch(IOException e) {
-          System.out.println("Error opening the file: " + e.getMessage());
-        }
-    }
-    fileCli.delete();
-    novo.renameTo(new File("clientes.txt"));
-  }
+  //   try (
+  //         FileWriter fstream = 
+  //         new FileWriter(novo, StandardCharsets.UTF_8, true);
+  //         PrintWriter outputFile = 
+  //         new PrintWriter(fstream, true); // using autoflushing
+  //       )
+  //       {        
+  //         outputFile.println(c.getNome()); 
+  //         outputFile.println(c.getIdade());
+  //         outputFile.println(c.getTipo());
+  //         outputFile.println(c.getIdCarroAlugado());
+  //         outputFile.println(c.getReboque());
+  //         outputFile.println(c.getConta().getSaldo());            
+  //       }
+  //       catch(InputMismatchException e) {
+  //         System.err.println("Invalid input: " + e.getMessage());
+  //       }
+  //       catch(IOException e) {
+  //         System.out.println("Error opening the file: " + e.getMessage());
+  //       }
+  //   }
+  //   fileCli.delete();
+  //   novo.renameTo(new File("clientes.txt"));
+  // }
 
-          //WILL BE REMOVED
-  public void updateVeic(){
+  //         //WILL BE REMOVED
+  // public void updateVeic(){
 
-    File novo = new File("novo.txt");
-    for(Veiculo c : veiculos){
+  //   File novo = new File("novo.txt");
+  //   for(Veiculo c : veiculos){
            
-      try(
-            FileWriter fstream = 
-            new FileWriter(novo, StandardCharsets.UTF_8, true);
-            PrintWriter outputFile = 
-              new PrintWriter(fstream, true); // using autoflushing
-          )
-        {          
-          outputFile.println(c.getId());
-          outputFile.println(c.getTipo()); 
-          outputFile.println(c.getNome());
-          outputFile.println(c.getDiaria());
-          outputFile.println(c.getIsAlugado());    
-        }
-        catch(InputMismatchException e) {
-          System.err.println("Invalid input: " + e.getMessage());
-        }
-        catch(IOException e) {
-          System.out.println("Error opening the file: " + e.getMessage());
-        }
-    }
-    fileVeic.delete();
-    novo.renameTo(new File("veiculos.txt"));
+  //     try(
+  //           FileWriter fstream = 
+  //           new FileWriter(novo, StandardCharsets.UTF_8, true);
+  //           PrintWriter outputFile = 
+  //             new PrintWriter(fstream, true); // using autoflushing
+  //         )
+  //       {          
+  //         outputFile.println(c.getId());
+  //         outputFile.println(c.getTipo()); 
+  //         outputFile.println(c.getNome());
+  //         outputFile.println(c.getDiaria());
+  //         outputFile.println(c.getIsAlugado());    
+  //       }
+  //       catch(InputMismatchException e) {
+  //         System.err.println("Invalid input: " + e.getMessage());
+  //       }
+  //       catch(IOException e) {
+  //         System.out.println("Error opening the file: " + e.getMessage());
+  //       }
+  //   }
+  //   fileVeic.delete();
+  //   novo.renameTo(new File("veiculos.txt"));
     
-  }
+  // }
               //WILL BE REMOVED
-  public void VeicWriter(){
-    for(Veiculo v : veiculos){
+  // public void VeicWriter(){
+  //   for(Veiculo v : veiculos){
       
-      try (
-            FileWriter fstream = 
-            new FileWriter(fileVeic, StandardCharsets.UTF_8, true);
-            PrintWriter outputFile = 
-            new PrintWriter(fstream, true); // using autoflushing
-          )
-        {              
-          if(!idExists(v.getId())){
-            outputFile.println(v.getId());
-            outputFile.println(v.getTipo());
-            outputFile.println(v.getNome()); 
-            outputFile.println(v.getDiaria());
-            outputFile.println(v.getIsAlugado()); 
-          }       
-        }
-        catch(InputMismatchException e) {
-          System.err.println("Invalid input: " + e.getMessage());
-        }
-        catch(IOException e) {
-          System.out.println("Error opening the file: " + e.getMessage());
-        }
-      }
-  }
-
+  //     try (
+  //           FileWriter fstream = 
+  //           new FileWriter(fileVeic, StandardCharsets.UTF_8, true);
+  //           PrintWriter outputFile = 
+  //           new PrintWriter(fstream, true); // using autoflushing
+  //         )
+  //       {              
+  //         if(!idExists(v.getId())){
+  //           outputFile.println(v.getId());
+  //           outputFile.println(v.getTipo());
+  //           outputFile.println(v.getNome()); 
+  //           outputFile.println(v.getDiaria());
+  //           outputFile.println(v.getIsAlugado()); 
+  //         }       
+  //       }
+  //       catch(InputMismatchException e) {
+  //         System.err.println("Invalid input: " + e.getMessage());
+  //       }
+  //       catch(IOException e) {
+  //         System.out.println("Error opening the file: " + e.getMessage());
+  //       }
+  //     }
+  // }
+                         
   public int nextId (){
     
     int nextId = -1;
@@ -607,8 +611,8 @@ public void reboque(String nome){
             devolve(nome);
             aluga(nome, veiculos.get(i).getId(),true);
 
-            updateCli();
-            updateVeic();
+            mngData.updateCli(clientes);
+            mngData.updateVeic(veiculos);
             break;
           }
 
@@ -616,12 +620,12 @@ public void reboque(String nome){
         if(!carWasFound){
           clientes.get(searchCli(nome)).getConta().setSaldo(ressarcimento);
           clientes.get(indiceCli).setIdCarroAlugado(-1);
-          updateCli();
-          updateVeic();
+          mngData.updateCli(clientes);
+          mngData.updateVeic(veiculos);
         }
 
         removeVeiculo(idVeic);
-        updateIds();
+        mngData.updateIds(veiculos, clientes);
       }
       else{
         System.out.println("fail: cliente não possui plano de reboque");
@@ -630,34 +634,35 @@ public void reboque(String nome){
     else
       System.out.println("fail: cliente não possui veículo");
   }
+}
 
           //WILL BE REMOVED
-  public void updateIds(){
-    boolean cliModified = false;
-    boolean veicModified = false;
+//   public void updateIds(){
+//     boolean cliModified = false;
+//     boolean veicModified = false;
 
-    for(int i =0; i<veiculos.size(); i++){
+//     for(int i =0; i<veiculos.size(); i++){
 
-      if(veiculos.get(i).getIsAlugado() == true){
-        for(int j=0; j<clientes.size(); j++){
-          if(clientes.get(i).getIdCarroAlugado() == veiculos.get(i).getId()){
-            cliModified = true;
-            veicModified = true;
-            clientes.get(i).setIdCarroAlugado(i);
-            veiculos.get(i).setId(i);
-          }
-        }
-      }
-      else{
-        cliModified = true;
-        veiculos.get(i).setId(i);
-      }
+//       if(veiculos.get(i).getIsAlugado() == true){
+//         for(int j=0; j<clientes.size(); j++){
+//           if(clientes.get(i).getIdCarroAlugado() == veiculos.get(i).getId()){
+//             cliModified = true;
+//             veicModified = true;
+//             clientes.get(i).setIdCarroAlugado(i);
+//             veiculos.get(i).setId(i);
+//           }
+//         }
+//       }
+//       else{
+//         cliModified = true;
+//         veiculos.get(i).setId(i);
+//       }
 
-    }
-    if(cliModified)
-      updateCli();
-    if(veicModified)  
-      updateVeic();
+//     }
+//     if(cliModified)
+//       updateCli();
+//     if(veicModified)  
+//       updateVeic();
 
-  }
-}
+//   }
+// }
