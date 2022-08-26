@@ -1,9 +1,5 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.io.IOException;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.InputMismatchException;
 import java.io.FileNotFoundException;
 import java.io.File;
