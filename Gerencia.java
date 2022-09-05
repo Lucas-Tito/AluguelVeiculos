@@ -307,7 +307,7 @@ public void diariaUpdate(){
  }
 
 
-  public int searchCli(String nomeToSearch){  //FUNÇÃO EM DESUSO
+  public int searchCli(String nomeToSearch){  
 
     int indiceCliente = -1; //é igual a -1 quando não encontrado
   
@@ -321,7 +321,7 @@ public void diariaUpdate(){
 
   }
 
-  public int searchVeic(int idToSearch){  //FUNÇÃO EM DESUSO
+  public int searchVeic(int idToSearch){  
 
     int indiceVeic = -1; //é igual a -1 quando não encontrado
   
