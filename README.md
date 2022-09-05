@@ -3,7 +3,7 @@
 </p>
 
 # Veihicle Rent   (README STILL IN CONSTRUCTION)
-### This is a software made using Object-Oriented Programming on Java. The idea is to Foi idealizada para alugar veículos mantendo registros das datas de retirada/saída e também das transações.
+### This is a software made using Object-Oriented Programming on Java. The idea is to rent vehicles keeping track of pick-up/departure dates, and also the transactions. 
 
 <br><br><br>
 ### Features
