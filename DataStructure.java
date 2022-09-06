@@ -4,7 +4,7 @@ public class DataStructure {
 
     // Returns index of stringToFind if it is present in arr[],
     // else return -1
-    static int binarySearch_String(ArrayList<Veiculo> arr, String stringToFind){
+    static int binarySearch_String(ArrayList<Vehicle> arr, String stringToFind){
 
         int low= 0, high = arr.size() - 1;
         while (low<= high) {

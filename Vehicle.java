@@ -1,11 +1,11 @@
-abstract class Veiculo{
+abstract class Vehicle {
   private int id;
   private String nome;
   protected String type;
   private float diaria;
   private boolean isAlugado;
 
-  Veiculo(int id, String nome, float diaria){
+  Vehicle(int id, String nome, float diaria){
     this.id = id;
     this.nome = nome;
     this.diaria = diaria;
@@ -13,7 +13,7 @@ abstract class Veiculo{
   }
   
   //construtor usado pela fileDataToArray() para colocar os dados do arquivo txt para dentro do vetor
-  Veiculo(int id,String nome, float diaria, boolean isAlugado){ 
+  Vehicle(int id, String nome, float diaria, boolean isAlugado){
     this.id = id;
     this.nome = nome;
     this.diaria = diaria;

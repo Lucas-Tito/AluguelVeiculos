@@ -91,9 +91,9 @@ class StoreData{
     }
 
 
-  public void CliWriter(ArrayList<Cliente> clientesToWrite){
+  public void CliWriter(ArrayList<Client> clientesToWrite){
 
-    for(Cliente c : clientesToWrite){           
+    for(Client c : clientesToWrite){
       try (
           FileWriter fstream = new FileWriter(fileCli, StandardCharsets.UTF_8, true);
           PrintWriter outputFile = new PrintWriter(fstream, true); // using autoflushing
@@ -121,8 +121,8 @@ class StoreData{
   }
 
 
-    public void VeicWriter(ArrayList<Veiculo> veicsToWrite){
-    for(Veiculo v : veicsToWrite){
+    public void VeicWriter(ArrayList<Vehicle> veicsToWrite){
+    for(Vehicle v : veicsToWrite){
       
       try (
             FileWriter fstream = 
@@ -149,9 +149,9 @@ class StoreData{
   }
 
 
-  public void updateCli(ArrayList<Cliente> clientesToUpdate){
+  public void updateCli(ArrayList<Client> clientesToUpdate){
     File novo = new File("novo.txt");
-    for(Cliente c : clientesToUpdate){
+    for(Client c : clientesToUpdate){
            
     try (
           FileWriter fstream = 
@@ -179,10 +179,10 @@ class StoreData{
   }
 
 
-  public void updateVeic(ArrayList<Veiculo> veicsToUpdate){
+  public void updateVeic(ArrayList<Vehicle> veicsToUpdate){
 
     File novo = new File("novo.txt");
-    for(Veiculo c : veicsToUpdate){
+    for(Vehicle c : veicsToUpdate){
            
       try(
             FileWriter fstream = 
@@ -211,37 +211,37 @@ class StoreData{
  
 
 
-  public void updateIds(ArrayList<Veiculo> veiculos, ArrayList<Cliente> clientes){
+  public void updateIds(ArrayList<Vehicle> vehicles, ArrayList<Client> clientes){
     boolean cliModified = false;
     boolean veicModified = false;
 
-    for(int i =0; i<veiculos.size(); i++){
+    for(int i = 0; i< vehicles.size(); i++){
 
-      if(veiculos.get(i).getIsAlugado() == true){
+      if(vehicles.get(i).getIsAlugado() == true){
         for(int j=0; j<clientes.size(); j++){
-          if(clientes.get(i).getIdCarroAlugado() == veiculos.get(i).getId()){
+          if(clientes.get(i).getIdCarroAlugado() == vehicles.get(i).getId()){
             cliModified = true;
             veicModified = true;
             clientes.get(i).setIdCarroAlugado(i);
-            veiculos.get(i).setId(i);
+            vehicles.get(i).setId(i);
           }
         }
       }
       else{
         cliModified = true;
-        veiculos.get(i).setId(i);
+        vehicles.get(i).setId(i);
       }
 
     }
     if(cliModified)
       updateCli(clientes);
     if(veicModified)  
-     updateVeic(veiculos);
+     updateVeic(vehicles);
 
   }
 
 
-  public void fileDataToArray(ArrayList<Cliente> clientesIn,ArrayList<Veiculo> veiculosIn){//arquivo pro array
+  public void fileDataToArray(ArrayList<Client> clientesIn, ArrayList<Vehicle> veiculosIn){//arquivo pro array
     File fileCli = new File("clientes.txt");
 
     try (Scanner clientStream = new Scanner(fileCli);){
@@ -253,7 +253,7 @@ class StoreData{
             boolean hasReboque = clientStream.nextBoolean();
             String saldo = clientStream.next();           
             
-            clientesIn.add(new Cliente(nome, idade, tipo, idCarro, hasReboque, Float.valueOf(saldo)));
+            clientesIn.add(new Client(nome, idade, tipo, idCarro, hasReboque, Float.valueOf(saldo)));
             clientStream.nextLine(); // clear buffer before next readLine
           }
     }
@@ -276,9 +276,9 @@ class StoreData{
         boolean alugado = veicStream.nextBoolean();           
             
         if(tipo.equals("moto")|| tipo.equals("Moto"))
-          veiculosIn.add(new Moto(id, nome, Float.valueOf(diaria), alugado));
+          veiculosIn.add(new Bike(id, nome, Float.valueOf(diaria), alugado));
         else
-          veiculosIn.add(new Carro(id, nome, Float.valueOf(diaria), alugado));
+          veiculosIn.add(new Car(id, nome, Float.valueOf(diaria), alugado));
 
           veicStream.nextLine(); // clear buffer before next readLine
       }

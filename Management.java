@@ -4,9 +4,9 @@ import java.util.InputMismatchException;
 import java.io.FileNotFoundException;
 import java.io.File;
 
-class Gerencia {
-  ArrayList<Cliente> clientes = new ArrayList<>();
-  ArrayList<Veiculo> veiculos = new ArrayList<>();
+class Management {
+  ArrayList<Client> clientes = new ArrayList<>();
+  ArrayList<Vehicle> vehicles = new ArrayList<>();
   StoreData mngData = new StoreData();
   File fileCli = new File("clientes.txt");
   File fileVeic = new File("veiculos.txt");
@@ -17,18 +17,18 @@ class Gerencia {
   // File fileCli = new File("clientes.txt");
   // File fileVeic = new File("veiculos.txt");
 
-  public ArrayList<Cliente> getClientes(){
+  public ArrayList<Client> getClientes(){
     return clientes;
   }
-  public ArrayList<Veiculo> getVeiculos(){
-    return veiculos;
+  public ArrayList<Vehicle> getVeiculos(){
+    return vehicles;
   }
   
         /* FUNÇÕES DE CLIENTE */
   //se o cliente não existir e não for de menor
   //a conta faz parte dos atributos de clientToAdd
   //adiciona o cliente no arrayList de clientes
-  public void addCliente(Cliente clientToAdd){
+  public void addCliente(Client clientToAdd){
     
     boolean letrasAceitas = clientToAdd.getTipo().equals("a") || 
             clientToAdd.getTipo().equals("A") ||
@@ -135,12 +135,12 @@ class Gerencia {
     
     //escreve veículo no txt se o tipo passado for válido
     if(tipoToAdd.equals("moto") || tipoToAdd.equals("Moto")){
-      veiculos.add(new Moto(veichileId, nomeToAdd, diariaToAdd));
-      mngData.VeicWriter(veiculos);
+      vehicles.add(new Bike(veichileId, nomeToAdd, diariaToAdd));
+      mngData.VeicWriter(vehicles);
    } 
     else if(tipoToAdd.equals("carro") || tipoToAdd.equals("Carro")){
-      veiculos.add(new Carro(veichileId, nomeToAdd, diariaToAdd));
-      mngData.VeicWriter(veiculos);
+      vehicles.add(new Car(veichileId, nomeToAdd, diariaToAdd));
+      mngData.VeicWriter(vehicles);
     }
     else
       System.out.println("fail: tipo inválido");
@@ -152,9 +152,9 @@ class Gerencia {
 
     int indiceVeic = searchVeic(idToRemove);
     if(indiceVeic != -1){
-      veiculos.remove(indiceVeic);
+      vehicles.remove(indiceVeic);
       System.out.println("Removido com sucesso!");
-      mngData.updateVeic(veiculos);
+      mngData.updateVeic(vehicles);
     }
     else
       System.out.println("fail: veículo inexistente");       
@@ -181,8 +181,8 @@ class Gerencia {
         inputIsValid = true;      
         System.out.print("Digite o novo nome: ");
         String nomeNovo = scanner.nextLine();
-        veiculos.get(indiceVeic).setNome(nomeNovo);
-        mngData.updateVeic(veiculos);
+        vehicles.get(indiceVeic).setNome(nomeNovo);
+        mngData.updateVeic(vehicles);
 
       }
       else if(opcao == 2){
@@ -190,8 +190,8 @@ class Gerencia {
         inputIsValid = true;
         System.out.print("Digite a nova diaria: ");
         int novaDiaria = scanner.nextInt();
-        veiculos.get(indiceVeic).setDiaria(novaDiaria);
-        mngData.updateVeic(veiculos);
+        vehicles.get(indiceVeic).setDiaria(novaDiaria);
+        mngData.updateVeic(vehicles);
       }
       else
         System.out.println("fail: input inválido");
@@ -205,8 +205,8 @@ class Gerencia {
   }
 
   public void listVeic(){
-    for(int i = 0; i < veiculos.size(); i++)
-      System.out.println(veiculos.get(i));
+    for(int i = 0; i < vehicles.size(); i++)
+      System.out.println(vehicles.get(i));
   }
 
           /* FIM DAS FUNÇÕES DE VEÍCULO */
@@ -221,10 +221,10 @@ public void aluga(String nome, int idCarro, boolean isReboque){
     if(clientes.get(indiceCliente).getIdCarroAlugado() == -1){  //verifica se o cliente já alugou algum veículo
     
         /*VERIFICAÇÃO DE COERENCIA DE CARTEIRA DE MOTORISTA*/
-    if(clientes.get(indiceCliente).getTipo().equals("A") && veiculos.get(idCarro).getTipo().equals("Moto")){
+    if(clientes.get(indiceCliente).getTipo().equals("A") && vehicles.get(idCarro).getTipo().equals("Moto")){
       tipoOk = true;
 
-    }else if(clientes.get(indiceCliente).getTipo().equals("B") && veiculos.get(idCarro).getTipo().equals("Carro")){
+    }else if(clientes.get(indiceCliente).getTipo().equals("B") && vehicles.get(idCarro).getTipo().equals("Carro")){
       tipoOk = true;
 
     }else if(clientes.get(indiceCliente).getTipo().equals("AB")){
@@ -236,10 +236,10 @@ public void aluga(String nome, int idCarro, boolean isReboque){
       int indiceVeic = searchVeic(idCarro);
       if(indiceVeic != -1){
 
-        if(veiculos.get(idCarro).getIsAlugado() == false){  //verifica se o carro já está alugado
+        if(vehicles.get(idCarro).getIsAlugado() == false){  //verifica se o carro já está alugado
 
-          if(clientes.get(indiceCliente).getConta().getSaldo() >= veiculos.get(idCarro).getDiaria()){ //verifica se o cliente tem saldo para pagar a primeira diaria
-            veiculos.get(indiceVeic).setIsAlugado(true); //seta como true a varíavel que diz se o veículo está alugado
+          if(clientes.get(indiceCliente).getConta().getSaldo() >= vehicles.get(idCarro).getDiaria()){ //verifica se o cliente tem saldo para pagar a primeira diaria
+            vehicles.get(indiceVeic).setIsAlugado(true); //seta como true a varíavel que diz se o veículo está alugado
             clientes.get(indiceCliente).setIdCarroAlugado(idCarro); //guarda o id do carro no objeto cliente
             
             if(!isReboque)  //isReboque é um parâmetro utilizado para saber se a função reboque() chamou a função aluga(), o que previne que seja perguntado se o cliente deseja o seguro reboque (já que, se a função reboque chama aluga() é porquê o cliente já possui o seguro)          
@@ -251,7 +251,7 @@ public void aluga(String nome, int idCarro, boolean isReboque){
                   clientes.get(indiceCliente).setReboque(true);
               }
           
-            mngData.updateVeic(veiculos);
+            mngData.updateVeic(vehicles);
             mngData.updateCli(clientes);
             }
 
@@ -301,7 +301,7 @@ public void diariaUpdate(){
       if(escolha.equals("s"))
         clientes.get(i).getConta().setSaldo(-15);  
     
-      clientes.get(i).getConta().setSaldo(veiculos.get(indiceVeic).getDiaria()*-1);   //realiza a cobrança
+      clientes.get(i).getConta().setSaldo(vehicles.get(indiceVeic).getDiaria()*-1);   //realiza a cobrança
       mngData.updateCli(clientes);
     }
  }
@@ -325,8 +325,8 @@ public void diariaUpdate(){
 
     int indiceVeic = -1; //é igual a -1 quando não encontrado
   
-    for(int i = 0; i < veiculos.size(); i++)
-      if(idToSearch == veiculos.get(i).getId()){
+    for(int i = 0; i < vehicles.size(); i++)
+      if(idToSearch == vehicles.get(i).getId()){
         indiceVeic = i;
         break;
     }
@@ -339,14 +339,14 @@ public void diariaUpdate(){
     String show = ""; 
     
     for(int i=0; i < clientes.size(); i++){
-      if(i != veiculos.size())
+      if(i != vehicles.size())
         show += "-";
       if(clientes.get(i).getIdCarroAlugado() != -1){  //acha os clientes que já alugaram
         show += clientes.get(i).getNome() + " [" + "id do veículo: " + clientes.get(i).getIdCarroAlugado(); 
 
-      for(int j = 0; j < veiculos.size(); j++)
-        if(veiculos.get(j).getId() == clientes.get(i).getIdCarroAlugado())
-          show += " | nome do veículo: " + veiculos.get(i).getNome() + "]";
+      for(int j = 0; j < vehicles.size(); j++)
+        if(vehicles.get(j).getId() == clientes.get(i).getIdCarroAlugado())
+          show += " | nome do veículo: " + vehicles.get(i).getNome() + "]";
 
       show +="\n";
       }
@@ -366,9 +366,9 @@ public void diariaUpdate(){
       System.out.println("fail: veículo inexistente");
     else{
     clientes.get(indiceCli).setIdCarroAlugado(-1);
-    veiculos.get(indiceVeic).setIsAlugado(false);
+    vehicles.get(indiceVeic).setIsAlugado(false);
     mngData.updateCli(clientes);
-    mngData.updateVeic(veiculos);
+    mngData.updateVeic(vehicles);
     }  
     
   }
@@ -409,17 +409,17 @@ public void reboque(String nome){
 
       if(clientes.get(indiceCli).getReboque() == true){// se o cliente possui plano de reboque
 
-        float ressarcimento = veiculos.get(idVeic).getDiaria();
+        float ressarcimento = vehicles.get(idVeic).getDiaria();
 
-        for(int i = 0 ; i <veiculos.size(); i++)
-          if(veiculos.get(i).getIsAlugado() == false && veiculos.get(i).getId() != idVeic){
+        for(int i = 0; i < vehicles.size(); i++)
+          if(vehicles.get(i).getIsAlugado() == false && vehicles.get(i).getId() != idVeic){
             //*IMPLEMENTAR VERIFICAÇÃO SE O VEÍCULO É COMPATÍVEL COM A CARTEIRA DO CLIENTE
             carWasFound = true;
             devolve(nome);
-            aluga(nome, veiculos.get(i).getId(),true);
+            aluga(nome, vehicles.get(i).getId(),true);
 
             mngData.updateCli(clientes);
-            mngData.updateVeic(veiculos);
+            mngData.updateVeic(vehicles);
             break;
           }
 
@@ -428,11 +428,11 @@ public void reboque(String nome){
           clientes.get(searchCli(nome)).getConta().setSaldo(ressarcimento);
           clientes.get(indiceCli).setIdCarroAlugado(-1);
           mngData.updateCli(clientes);
-          mngData.updateVeic(veiculos);
+          mngData.updateVeic(vehicles);
         }
 
         removeVeiculo(idVeic);
-        mngData.updateIds(veiculos, clientes);
+        mngData.updateIds(vehicles, clientes);
       }
       else{
         System.out.println("fail: cliente não possui plano de reboque");
