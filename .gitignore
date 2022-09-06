@@ -1,4 +1,6 @@
 *.class
 .upm/
+.idea/
 .breakpoints
 todo.txt
+*.iml
