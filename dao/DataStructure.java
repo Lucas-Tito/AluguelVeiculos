@@ -1,3 +1,7 @@
+package dao;
+
+import Vehicle.Vehicle;
+
 import java.util.ArrayList;
 
 public class DataStructure {
@@ -10,7 +14,7 @@ public class DataStructure {
         while (low<= high) {
             int mid = low+ (high - low) / 2;
  
-            int res = stringToFind.compareTo(arr.get(mid).getNome());
+            int res = stringToFind.compareTo(arr.get(mid).getName());
  
             // Check if stringToFind is present at mid
             if (res == 0)

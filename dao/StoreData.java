@@ -1,3 +1,10 @@
+package dao;
+
+import Client.Client;
+import Vehicle.Bike;
+import Vehicle.Car;
+import Vehicle.Vehicle;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.IOException;
@@ -10,10 +17,10 @@ import java.io.File;
 
 
 
-class StoreData{
+public class StoreData{
 
-  File fileCli = new File("clientes.txt");
-  File fileVeic = new File("veiculos.txt");
+  File fileCli = new File("Client/clientes.txt");
+  File fileVeic = new File("Vehicle/veiculos.txt");
 
 
 
@@ -99,14 +106,14 @@ class StoreData{
           PrintWriter outputFile = new PrintWriter(fstream, true); // using autoflushing
           )
         {
-          if(!nameExists(c.getNome())){
+          if(!nameExists(c.getName())){
               
-            outputFile.println(c.getNome()); 
-            outputFile.println(c.getIdade());
-            outputFile.println(c.getTipo());
-            outputFile.println(c.getIdCarroAlugado());
-            outputFile.println(c.getReboque());
-            outputFile.println(c.getConta().getSaldo());
+            outputFile.println(c.getName());
+            outputFile.println(c.getAge());
+            outputFile.println(c.getLicenseType());
+            outputFile.println(c.getRentedVehicle());
+            outputFile.println(c.getHasInsurance());
+            outputFile.println(c.getAccount().getBalance());
               
           }       
         }
@@ -133,10 +140,10 @@ class StoreData{
         {              
           if(!idExists(v.getId())){
             outputFile.println(v.getId());
-            outputFile.println(v.getTipo());
-            outputFile.println(v.getNome()); 
-            outputFile.println(v.getDiaria());
-            outputFile.println(v.getIsAlugado()); 
+            outputFile.println(v.getType());
+            outputFile.println(v.getName());
+            outputFile.println(v.getDailyRate());
+            outputFile.println(v.getIsRented());
           }       
         }
         catch(InputMismatchException e) {
@@ -160,12 +167,12 @@ class StoreData{
           new PrintWriter(fstream, true); // using autoflushing
         )
         {        
-          outputFile.println(c.getNome()); 
-          outputFile.println(c.getIdade());
-          outputFile.println(c.getTipo());
-          outputFile.println(c.getIdCarroAlugado());
-          outputFile.println(c.getReboque());
-          outputFile.println(c.getConta().getSaldo());            
+          outputFile.println(c.getName());
+          outputFile.println(c.getAge());
+          outputFile.println(c.getLicenseType());
+          outputFile.println(c.getRentedVehicle());
+          outputFile.println(c.getHasInsurance());
+          outputFile.println(c.getAccount().getBalance());
         }
         catch(InputMismatchException e) {
           System.err.println("Invalid input: " + e.getMessage());
@@ -175,7 +182,7 @@ class StoreData{
         }
     }
     fileCli.delete();
-    novo.renameTo(new File("clientes.txt"));
+    novo.renameTo(new File("Client/clientes.txt"));
   }
 
 
@@ -192,10 +199,10 @@ class StoreData{
           )
         {          
           outputFile.println(c.getId());
-          outputFile.println(c.getTipo()); 
-          outputFile.println(c.getNome());
-          outputFile.println(c.getDiaria());
-          outputFile.println(c.getIsAlugado());    
+          outputFile.println(c.getType());
+          outputFile.println(c.getName());
+          outputFile.println(c.getDailyRate());
+          outputFile.println(c.getIsRented());
         }
         catch(InputMismatchException e) {
           System.err.println("Invalid input: " + e.getMessage());
@@ -205,7 +212,7 @@ class StoreData{
         }
     }
     fileVeic.delete();
-    novo.renameTo(new File("veiculos.txt"));
+    novo.renameTo(new File("Vehicle/veiculos.txt"));
     
   }
  
@@ -217,12 +224,12 @@ class StoreData{
 
     for(int i = 0; i< vehicles.size(); i++){
 
-      if(vehicles.get(i).getIsAlugado() == true){
+      if(vehicles.get(i).getIsRented() == true){
         for(int j=0; j<clientes.size(); j++){
-          if(clientes.get(i).getIdCarroAlugado() == vehicles.get(i).getId()){
+          if(clientes.get(i).getRentedVehicle() == vehicles.get(i).getId()){
             cliModified = true;
             veicModified = true;
-            clientes.get(i).setIdCarroAlugado(i);
+            clientes.get(i).setRentedVehicleId(i);
             vehicles.get(i).setId(i);
           }
         }
@@ -242,7 +249,7 @@ class StoreData{
 
 
   public void fileDataToArray(ArrayList<Client> clientesIn, ArrayList<Vehicle> veiculosIn){//arquivo pro array
-    File fileCli = new File("clientes.txt");
+    File fileCli = new File("Client/clientes.txt");
 
     try (Scanner clientStream = new Scanner(fileCli);){
           while(clientStream.hasNext()) { 
@@ -264,7 +271,7 @@ class StoreData{
           System.out.println("\nAviso: Não há dados de cliente");
         }
         
-        File fileVeic = new File("veiculos.txt");
+        File fileVeic = new File("Vehicle/veiculos.txt");
 
     try (Scanner veicStream = new Scanner(fileVeic);){
 

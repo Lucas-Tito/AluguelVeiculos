@@ -1,15 +1,22 @@
+package dao;
+
+import Client.Client;
+import Vehicle.Bike;
+import Vehicle.Car;
+import Vehicle.Vehicle;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.io.FileNotFoundException;
 import java.io.File;
 
-class Management {
-  ArrayList<Client> clientes = new ArrayList<>();
+public class Management {
+  ArrayList<Client> clients = new ArrayList<>();
   ArrayList<Vehicle> vehicles = new ArrayList<>();
   StoreData mngData = new StoreData();
-  File fileCli = new File("clientes.txt");
-  File fileVeic = new File("veiculos.txt");
+  File fileCli = new File("clients.txt");
+  File fileVeic = new File("vehicles.txt");
   int nextVehicleId = 0;
   String escolha;
 
@@ -17,8 +24,8 @@ class Management {
   // File fileCli = new File("clientes.txt");
   // File fileVeic = new File("veiculos.txt");
 
-  public ArrayList<Client> getClientes(){
-    return clientes;
+  public ArrayList<Client> getClients(){
+    return clients;
   }
   public ArrayList<Vehicle> getVeiculos(){
     return vehicles;
@@ -30,26 +37,26 @@ class Management {
   //adiciona o cliente no arrayList de clientes
   public void addCliente(Client clientToAdd){
     
-    boolean letrasAceitas = clientToAdd.getTipo().equals("a") || 
-            clientToAdd.getTipo().equals("A") ||
-            clientToAdd.getTipo().equals("b") ||
-            clientToAdd.getTipo().equals("B") ||
-            clientToAdd.getTipo().equals("ab") ||
-            clientToAdd.getTipo().equals("AB");
+    boolean letrasAceitas = clientToAdd.getLicenseType().equals("a") ||
+            clientToAdd.getLicenseType().equals("A") ||
+            clientToAdd.getLicenseType().equals("b") ||
+            clientToAdd.getLicenseType().equals("B") ||
+            clientToAdd.getLicenseType().equals("ab") ||
+            clientToAdd.getLicenseType().equals("AB");
     
-    if(mngData.nameExists(clientToAdd.getNome()))
+    if(mngData.nameExists(clientToAdd.getName()))
       System.out.println("fail: cliente já cadastrado");
 
-    else if(clientToAdd.getIdade() < 18)
+    else if(clientToAdd.getAge() < 18)
       System.out.println("fail: menores não podem pilotar");
     
     else if(!letrasAceitas)
       System.out.println("fail: tipo de carteira inválido");
 
     else{
-      clientToAdd.setTipo(clientToAdd.getTipo().toUpperCase()); //padroniza o tipo como maiúsculo
-      clientes.add(clientToAdd);
-      mngData.CliWriter(clientes);//escreve o cliente no txt
+      clientToAdd.setLicenseType(clientToAdd.getLicenseType().toUpperCase()); //padroniza o tipo como maiúsculo
+      clients.add(clientToAdd);
+      mngData.CliWriter(clients);//escreve o cliente no txt
     }
 } 
   //Remove o primeiro cliente com nome igual ao contido em clientToRemove  
@@ -58,9 +65,9 @@ class Management {
     int indiceCli = searchCli(clientToRemove);
     if(indiceCli != -1){
 
-      clientes.remove(indiceCli);
+      clients.remove(indiceCli);
       System.out.println("Removido com sucesso!");
-      mngData.updateCli(clientes);  //deixa o txt de clientes igual ao vetor
+      mngData.updateCli(clients);  //deixa o txt de clientes igual ao vetor
       
     }
     else
@@ -88,16 +95,16 @@ class Management {
         inputIsValid = true;
         System.out.print("Digite o novo nome: ");
         String nomeNovo = scanner.nextLine();
-        clientes.get(indiceCli).setName(nomeNovo);
-        mngData.updateCli(clientes);
+        clients.get(indiceCli).setName(nomeNovo);
+        mngData.updateCli(clients);
       }
       else if(opcao == 2){
 
         inputIsValid = true;    
         System.out.print("Digite a nova idade: ");
         int idadeToEdit = scanner.nextInt();
-        clientes.get(indiceCli).setIdade(idadeToEdit);
-        mngData.updateCli(clientes);
+        clients.get(indiceCli).setAge(idadeToEdit);
+        mngData.updateCli(clients);
 
       }
       else if(opcao == 3){
@@ -105,8 +112,8 @@ class Management {
         inputIsValid = true;    
         System.out.print("Digite o novo tipoCarteira: ");
         String tipoNovo = scanner.nextLine();   
-        clientes.get(indiceCli).setTipo(tipoNovo);
-        mngData.updateCli(clientes);
+        clients.get(indiceCli).setLicenseType(tipoNovo);
+        mngData.updateCli(clients);
       }
       else
         System.out.println("fail: input inválido");    
@@ -121,8 +128,8 @@ class Management {
 
 
   public void listCli(){  //lista os clientes
-    for(int i = 0; i < clientes.size(); i++)
-      System.out.println(clientes.get(i));
+    for(int i = 0; i < clients.size(); i++)
+      System.out.println(clients.get(i));
   }
 
               /* FUNÇÕES DE VEÍCULO */
@@ -181,7 +188,7 @@ class Management {
         inputIsValid = true;      
         System.out.print("Digite o novo nome: ");
         String nomeNovo = scanner.nextLine();
-        vehicles.get(indiceVeic).setNome(nomeNovo);
+        vehicles.get(indiceVeic).setName(nomeNovo);
         mngData.updateVeic(vehicles);
 
       }
@@ -190,7 +197,7 @@ class Management {
         inputIsValid = true;
         System.out.print("Digite a nova diaria: ");
         int novaDiaria = scanner.nextInt();
-        vehicles.get(indiceVeic).setDiaria(novaDiaria);
+        vehicles.get(indiceVeic).setDailyRate(novaDiaria);
         mngData.updateVeic(vehicles);
       }
       else
@@ -218,16 +225,16 @@ public void aluga(String nome, int idCarro, boolean isReboque){
   boolean tipoOk = false;
   if(indiceCliente != -1){  //verifica se o cliente existe
 
-    if(clientes.get(indiceCliente).getIdCarroAlugado() == -1){  //verifica se o cliente já alugou algum veículo
+    if(clients.get(indiceCliente).getRentedVehicle() == -1){  //verifica se o cliente já alugou algum veículo
     
         /*VERIFICAÇÃO DE COERENCIA DE CARTEIRA DE MOTORISTA*/
-    if(clientes.get(indiceCliente).getTipo().equals("A") && vehicles.get(idCarro).getTipo().equals("Moto")){
+    if(clients.get(indiceCliente).getLicenseType().equals("A") && vehicles.get(idCarro).getType().equals("Moto")){
       tipoOk = true;
 
-    }else if(clientes.get(indiceCliente).getTipo().equals("B") && vehicles.get(idCarro).getTipo().equals("Carro")){
+    }else if(clients.get(indiceCliente).getLicenseType().equals("B") && vehicles.get(idCarro).getType().equals("Carro")){
       tipoOk = true;
 
-    }else if(clientes.get(indiceCliente).getTipo().equals("AB")){
+    }else if(clients.get(indiceCliente).getLicenseType().equals("AB")){
       tipoOk = true;
     }
         /*FIM VERIFICAÇÃO DE COERENCIA DE CARTEIRA*/
@@ -236,23 +243,23 @@ public void aluga(String nome, int idCarro, boolean isReboque){
       int indiceVeic = searchVeic(idCarro);
       if(indiceVeic != -1){
 
-        if(vehicles.get(idCarro).getIsAlugado() == false){  //verifica se o carro já está alugado
+        if(vehicles.get(idCarro).getIsRented() == false){  //verifica se o carro já está alugado
 
-          if(clientes.get(indiceCliente).getConta().getSaldo() >= vehicles.get(idCarro).getDiaria()){ //verifica se o cliente tem saldo para pagar a primeira diaria
-            vehicles.get(indiceVeic).setIsAlugado(true); //seta como true a varíavel que diz se o veículo está alugado
-            clientes.get(indiceCliente).setIdCarroAlugado(idCarro); //guarda o id do carro no objeto cliente
+          if(clients.get(indiceCliente).getAccount().getBalance() >= vehicles.get(idCarro).getDailyRate()){ //verifica se o cliente tem saldo para pagar a primeira diaria
+            vehicles.get(indiceVeic).setIsRented(true); //seta como true a varíavel que diz se o veículo está alugado
+            clients.get(indiceCliente).setRentedVehicleId(idCarro); //guarda o id do carro no objeto cliente
             
             if(!isReboque)  //isReboque é um parâmetro utilizado para saber se a função reboque() chamou a função aluga(), o que previne que seja perguntado se o cliente deseja o seguro reboque (já que, se a função reboque chama aluga() é porquê o cliente já possui o seguro)          
-              if(clientes.get(indiceCliente).getReboque() == false){
+              if(clients.get(indiceCliente).getHasInsurance() == false){
                 System.out.println("Deseja um seguro reboque por + 15 reais na diária?");
                 escolha = scanner.next();
                 System.out.println("Alugado com sucesso!");
                 if(escolha.equals("s") || escolha.equals("sim") || escolha.equals("S") || escolha.equals("Sim"))
-                  clientes.get(indiceCliente).setReboque(true);
+                  clients.get(indiceCliente).setHasInsurance(true);
               }
           
             mngData.updateVeic(vehicles);
-            mngData.updateCli(clientes);
+            mngData.updateCli(clients);
             }
 
           else
@@ -282,8 +289,8 @@ public void depositar(String nome, float saldo){
   else{
     int indiceCli = searchCli(nome);
     if(indiceCli != -1){
-      clientes.get(indiceCli).getConta().setSaldo(saldo);
-      mngData.updateCli(clientes);
+      clients.get(indiceCli).getAccount().setBalance(saldo);
+      mngData.updateCli(clients);
     }
     else
       System.out.println("fail: cliente inexistente");
@@ -294,15 +301,15 @@ public void depositar(String nome, float saldo){
 //CONVERSAR SOBRE IMPLEMENTAR DE MANEIRA QUE SEJA POSSÍVEL FICAR COM CONTA NEGATIVA
 public void diariaUpdate(){ 
 
-  for(int i = 0; i < clientes.size();i++)
-    if(clientes.get(i).getIdCarroAlugado() != -1){ //acha os clientes que já alugaram
-      int indiceVeic = searchVeic(clientes.get(i).getIdCarroAlugado());
+  for(int i = 0; i < clients.size(); i++)
+    if(clients.get(i).getRentedVehicle() != -1){ //acha os clientes que já alugaram
+      int indiceVeic = searchVeic(clients.get(i).getRentedVehicle());
 
       if(escolha.equals("s"))
-        clientes.get(i).getConta().setSaldo(-15);  
+        clients.get(i).getAccount().setBalance(-15);
     
-      clientes.get(i).getConta().setSaldo(vehicles.get(indiceVeic).getDiaria()*-1);   //realiza a cobrança
-      mngData.updateCli(clientes);
+      clients.get(i).getAccount().setBalance(vehicles.get(indiceVeic).getDailyRate()*-1);   //realiza a cobrança
+      mngData.updateCli(clients);
     }
  }
 
@@ -311,8 +318,8 @@ public void diariaUpdate(){
 
     int indiceCliente = -1; //é igual a -1 quando não encontrado
   
-    for(int i = 0; i < clientes.size(); i++)
-      if(nomeToSearch.equals(clientes.get(i).getNome())){
+    for(int i = 0; i < clients.size(); i++)
+      if(nomeToSearch.equals(clients.get(i).getName())){
         indiceCliente = i;
         break;
     }
@@ -338,15 +345,15 @@ public void diariaUpdate(){
   public void listAlugados (){  // implementar: SE NÃO ACHOU NENHUM PRINTAR ERRO
     String show = ""; 
     
-    for(int i=0; i < clientes.size(); i++){
+    for(int i = 0; i < clients.size(); i++){
       if(i != vehicles.size())
         show += "-";
-      if(clientes.get(i).getIdCarroAlugado() != -1){  //acha os clientes que já alugaram
-        show += clientes.get(i).getNome() + " [" + "id do veículo: " + clientes.get(i).getIdCarroAlugado(); 
+      if(clients.get(i).getRentedVehicle() != -1){  //acha os clientes que já alugaram
+        show += clients.get(i).getName() + " [" + "id do veículo: " + clients.get(i).getRentedVehicle();
 
       for(int j = 0; j < vehicles.size(); j++)
-        if(vehicles.get(j).getId() == clientes.get(i).getIdCarroAlugado())
-          show += " | nome do veículo: " + vehicles.get(i).getNome() + "]";
+        if(vehicles.get(j).getId() == clients.get(i).getRentedVehicle())
+          show += " | nome do veículo: " + vehicles.get(i).getName() + "]";
 
       show +="\n";
       }
@@ -358,16 +365,16 @@ public void diariaUpdate(){
   public void devolve(String nome){  //IMPLEMENTAR DE MANEIRA QUE SÓ É POSSÍVEL DEVOLVER SE TODAS AS DIÁRIAS TIVEREM QUITADAS (CLIENTE COM SALDO POSITIVO) E VERIFICAR SE O CLIENTE TEM CARRO PARA DEVOLVER
 
     int indiceCli = searchCli(nome);  
-    int indiceVeic = searchVeic(clientes.get(indiceCli).getIdCarroAlugado());
+    int indiceVeic = searchVeic(clients.get(indiceCli).getRentedVehicle());
 
     if(indiceCli == -1)
       System.out.println("fail: cliente inexistente");
     if(indiceVeic == -1)
       System.out.println("fail: veículo inexistente");
     else{
-    clientes.get(indiceCli).setIdCarroAlugado(-1);
-    vehicles.get(indiceVeic).setIsAlugado(false);
-    mngData.updateCli(clientes);
+    clients.get(indiceCli).setRentedVehicleId(-1);
+    vehicles.get(indiceVeic).setIsRented(false);
+    mngData.updateCli(clients);
     mngData.updateVeic(vehicles);
     }  
     
@@ -402,37 +409,37 @@ public void diariaUpdate(){
 public void reboque(String nome){
     
     int indiceCli = searchCli(nome);
-    int idVeic = clientes.get(indiceCli).getIdCarroAlugado();
+    int idVeic = clients.get(indiceCli).getRentedVehicle();
     boolean carWasFound = false;
 
-    if(clientes.get(indiceCli).getIdCarroAlugado() != -1){//se o cliente já alugou algum veículo
+    if(clients.get(indiceCli).getRentedVehicle() != -1){//se o cliente já alugou algum veículo
 
-      if(clientes.get(indiceCli).getReboque() == true){// se o cliente possui plano de reboque
+      if(clients.get(indiceCli).getHasInsurance() == true){// se o cliente possui plano de reboque
 
-        float ressarcimento = vehicles.get(idVeic).getDiaria();
+        float ressarcimento = vehicles.get(idVeic).getDailyRate();
 
         for(int i = 0; i < vehicles.size(); i++)
-          if(vehicles.get(i).getIsAlugado() == false && vehicles.get(i).getId() != idVeic){
+          if(vehicles.get(i).getIsRented() == false && vehicles.get(i).getId() != idVeic){
             //*IMPLEMENTAR VERIFICAÇÃO SE O VEÍCULO É COMPATÍVEL COM A CARTEIRA DO CLIENTE
             carWasFound = true;
             devolve(nome);
             aluga(nome, vehicles.get(i).getId(),true);
 
-            mngData.updateCli(clientes);
+            mngData.updateCli(clients);
             mngData.updateVeic(vehicles);
             break;
           }
 
 
         if(!carWasFound){
-          clientes.get(searchCli(nome)).getConta().setSaldo(ressarcimento);
-          clientes.get(indiceCli).setIdCarroAlugado(-1);
-          mngData.updateCli(clientes);
+          clients.get(searchCli(nome)).getAccount().setBalance(ressarcimento);
+          clients.get(indiceCli).setRentedVehicleId(-1);
+          mngData.updateCli(clients);
           mngData.updateVeic(vehicles);
         }
 
         removeVeiculo(idVeic);
-        mngData.updateIds(vehicles, clientes);
+        mngData.updateIds(vehicles, clients);
       }
       else{
         System.out.println("fail: cliente não possui plano de reboque");

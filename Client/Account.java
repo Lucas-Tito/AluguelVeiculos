@@ -1,15 +1,17 @@
-class Account {
+package Client;
+
+public class Account {
   private float balance;
 
   public Account(){
     balance = 0;
   }
 
-  public void setSaldo(float valueToSet){
+  public void setBalance(float valueToSet){
       this.balance += valueToSet;
   }
 
-  public float getSaldo(){
+  public float getBalance(){
     return balance;
   }
 

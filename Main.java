@@ -1,3 +1,7 @@
+import Client.Client;
+import dao.Management;
+import dao.StoreData;
+
 import java.util.Scanner;
 
 class Main {
@@ -5,7 +9,7 @@ class Main {
     Scanner scanner = new Scanner(System.in);
     Management g = new Management();
     StoreData mngData = new StoreData();
-    mngData.fileDataToArray(g.getClientes(),g.getVeiculos());
+    mngData.fileDataToArray(g.getClients(),g.getVeiculos());
 
     while (true) {
         String line = scanner.nextLine();
