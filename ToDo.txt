@@ -5,4 +5,4 @@ DataStructure:
 avoid getters and setters (all classes)
 
 
-Implement Graphic Interface
+ONLY GLOBAL STORE DATA IS BEING USED

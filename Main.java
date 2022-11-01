@@ -36,15 +36,15 @@ class Main {
         } else if (ui[0].equals("aluga")) {// nome e indice do veiculo
           g.aluga(ui[1], Integer.parseInt(ui[2]), false);
         } else if (ui[0].equals("deposito")){// nome e valor
-          g.depositar(ui[1],Float.parseFloat(ui[2]));
+          g.deposit(ui[1],Float.parseFloat(ui[2]));
         }else if (ui[0].equals("diaria")){
-          g.diariaUpdate();
+          g.dailyRateUpdate();
         }else if (ui[0].equals("devolve")){// nome
-          g.devolve(ui[1]);
+          g.returnVehicle(ui[1]);
         }else if (ui[0].equals("reboque")){// nome
-          g.reboque(ui[1]);
+          g.tow(ui[1]);
         }else if (ui[0].equals("listAlugados")){
-          g.listAlugados();
+          g.listClientsRenting();
         }        
         else {
           System.out.println("fail: comando invalido");
