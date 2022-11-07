@@ -1,13 +1,9 @@
 package dao.ClientDao;
 
 import Client.Client;
-import Vehicle.Vehicle;
 import dao.StoreData;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Client_StoreData_Memory {
@@ -25,9 +21,9 @@ public class Client_StoreData_Memory {
   //se o cliente não existir e não for de menor
   //a conta faz parte dos atributos de clientToAdd
   //adiciona o cliente no arrayList de clientes
-  public void addCliente(Client clientToAdd){
+  public void addClient(Client clientToAdd){
     
-    boolean letrasAceitas = clientToAdd.getLicenseType().equals("a") ||
+    boolean verifiedLetters = clientToAdd.getLicenseType().equals("a") ||
             clientToAdd.getLicenseType().equals("A") ||
             clientToAdd.getLicenseType().equals("b") ||
             clientToAdd.getLicenseType().equals("B") ||
@@ -35,33 +31,33 @@ public class Client_StoreData_Memory {
             clientToAdd.getLicenseType().equals("AB");
     
     if(mngData.nameExists(clientToAdd.getName()))
-      System.out.println("fail: cliente já cadastrado");
+      System.out.println("fail: client already registered");
 
     else if(clientToAdd.getAge() < 18)
-      System.out.println("fail: menores não podem pilotar");
+      System.out.println("fail: minors can't drive");
     
-    else if(!letrasAceitas)
-      System.out.println("fail: tipo de carteira inválido");
+    else if(!verifiedLetters)
+      System.out.println("fail: invalid driver license type");
 
     else{
-      clientToAdd.setLicenseType(clientToAdd.getLicenseType().toUpperCase()); //padroniza o tipo como maiúsculo
+      clientToAdd.setLicenseType(clientToAdd.getLicenseType().toUpperCase()); //all letters to upper case
       clients.add(clientToAdd);
-      mngData.CliWriter(clients);//escreve o cliente no txt
+      mngData.CliWriter(clients);//write in client file
     }
 } 
-  //Remove o primeiro cliente com nome igual ao contido em clientToRemove  
-  public void removeCliente(String clientToRemove){
+  //Removes first client that matches given name
+  public void removeClient(String clientToRemove){
 
-    int indiceCli = searchCli(clientToRemove);
-    if(indiceCli != -1){
+    int clientId = searchCli(clientToRemove);
+    if(clientId != -1){
 
-      clients.remove(indiceCli);
-      System.out.println("Removido com sucesso!");
-      mngData.updateCli(clients);  //deixa o txt de clientes igual ao vetor
+      clients.remove(clientId);
+      System.out.println("Successfully removed!");
+      mngData.updateCli(clients);  //updates file
       
     }
     else
-      System.out.println("fail: cliente inexistente");
+      System.out.println("fail: client not found");
       
   }
 
@@ -70,7 +66,7 @@ public class Client_StoreData_Memory {
     return clients.get(index);
   }
 
-  public void editClient(Client updatedClient, int indexToUpdate){
+  public void updateClient(Client updatedClient, int indexToUpdate){
 
     clients.set(indexToUpdate, updatedClient);
     mngData.updateCli(clients);
@@ -142,7 +138,7 @@ public class Client_StoreData_Memory {
   }
 
 
-  public void listCli(){  //lista os clientes
+  public void listClients(){
     for(int i = 0; i < clients.size(); i++)
       System.out.println(clients.get(i));
   }

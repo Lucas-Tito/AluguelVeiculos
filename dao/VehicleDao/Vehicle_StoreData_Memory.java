@@ -1,6 +1,5 @@
 package dao.VehicleDao;
 
-import Client.Client;
 import Vehicle.Bike;
 import Vehicle.Car;
 import Vehicle.Vehicle;
@@ -29,42 +28,40 @@ public class Vehicle_StoreData_Memory {
     return vehicles.get(index);
   }
 
-  //como é normal uma locadora ter o mesmo veículo
-  //não será feita uma verificação que compara veículos
-  //a diferenciação será dada a partir dos ids que são incrementados automaticamente  
-  public void addVeiculo(String tipoToAdd, String nomeToAdd, float diariaToAdd){
 
-    int veichileId = nextId();  //chama função que retorna o último id incrementado
+  public void addVehicle(String type, String name, float dailyRate){
+
+    int vehicleId = nextId();  //calls function that returns last incremented id
     
-    //escreve veículo no txt se o tipo passado for válido
-    if(tipoToAdd.equals("moto") || tipoToAdd.equals("Moto")){
-      vehicles.add(new Bike(veichileId, nomeToAdd, diariaToAdd));
+    //writes vehicles inside the file if type valid
+    if(type.equals("moto") || type.equals("Moto")){
+      vehicles.add(new Bike(vehicleId, name, dailyRate));
       mngData.VeicWriter(vehicles);
    } 
-    else if(tipoToAdd.equals("carro") || tipoToAdd.equals("Carro")){
-      vehicles.add(new Car(veichileId, nomeToAdd, diariaToAdd));
+    else if(type.equals("carro") || type.equals("Carro")){
+      vehicles.add(new Car(vehicleId, name, dailyRate));
       mngData.VeicWriter(vehicles);
     }
     else
-      System.out.println("fail: tipo inválido");
+      System.out.println("fail: invalid type");
 
   }
 
-  //Remove o veículo que corresponder ao id contido em idToRemove  
-  public void removeVeiculo(int idToRemove){
 
-    int indiceVeic = searchVeic(idToRemove);
-    if(indiceVeic != -1){
-      vehicles.remove(indiceVeic);
-      System.out.println("Removido com sucesso!");
+  public void removeVehicle(int idToRemove){
+
+    int vehicleId = searchVeic(idToRemove);
+    if(vehicleId != -1){
+      vehicles.remove(vehicleId);
+      System.out.println("Successfully removed!");
       mngData.updateVeic(vehicles);
     }
     else
-      System.out.println("fail: veículo inexistente");       
+      System.out.println("fail: vehicle not found");
       
   }
 
-  public void editVehicle(Vehicle updatedVehicle, int indexToUpdate){
+  public void updateVehicle(Vehicle updatedVehicle, int indexToUpdate){
 
     vehicles.set(indexToUpdate, updatedVehicle);
     mngData.updateVeic(vehicles);
@@ -116,7 +113,7 @@ public class Vehicle_StoreData_Memory {
 
   }
 
-  public void listVeic(){
+  public void listVehicles(){
     for(int i = 0; i < vehicles.size(); i++)
       System.out.println(vehicles.get(i));
   }

@@ -7,8 +7,7 @@ import java.util.Scanner;
 class Main {
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
-    Management g = new Management();
-    StoreData mngData = new StoreData();
+    Controller controller = new Controller();
     mngData.fileDataToArray(g.getClients(),g.getVeiculos());
 
     while (true) {
@@ -17,37 +16,37 @@ class Main {
         String ui[] = line.split(" ");
         if (line.equals("end")) {
           break;
-        } else if (ui[0].equals("addCli")) {//nome, idade, tipoCarteira
-          g.addCliente(new Client(ui[1], Integer.parseInt(ui[2]), ui[3]));
-        } else if (ui[0].equals("removeCli")){// nome
-          g.removeCliente(ui[1]);
-        } else if (ui[0].equals("listCli")) {
-          g.listCli();
-        } else if (ui[0].equals("editCli")){
+        } else if (ui[0].equals("addClient")) {//name, age, driver license type
+          controller.addClient(new Client(ui[1], Integer.parseInt(ui[2]), ui[3]));
+        } else if (ui[0].equals("removeClient")){// name
+          controller.removeClient(ui[1]);
+        } else if (ui[0].equals("listClients")) {
+          controller.listClients();
+        } else if (ui[0].equals("updateClient")){
           g.editCliente();
-        } else if (ui[0].equals("listVeic")){
-          g.listVeic();
-        } else if (ui[0].equals("removeVeic")) {//id
-          g.removeVeiculo(Integer.parseInt(ui[1]));
-        } else if (ui[0].equals("addVeic")){//tipo do veiculo, nome, diaria
-          g.addVeiculo(ui[1],ui[2],Float.parseFloat(ui[3]));
-        } else if (ui[0].equals("editVeic")) {
-          g.editVeiculo();
-        } else if (ui[0].equals("aluga")) {// nome e indice do veiculo
-          g.aluga(ui[1], Integer.parseInt(ui[2]), false);
-        } else if (ui[0].equals("deposito")){// nome e valor
-          g.deposit(ui[1],Float.parseFloat(ui[2]));
-        }else if (ui[0].equals("diaria")){
-          g.dailyRateUpdate();
-        }else if (ui[0].equals("devolve")){// nome
-          g.returnVehicle(ui[1]);
-        }else if (ui[0].equals("reboque")){// nome
-          g.tow(ui[1]);
-        }else if (ui[0].equals("listAlugados")){
-          g.listClientsRenting();
+        } else if (ui[0].equals("listVehicles")){
+          controller.listVehicles();
+        } else if (ui[0].equals("removeVehicle")) {//id
+          controller.removeVehicle(Integer.parseInt(ui[1]));
+        } else if (ui[0].equals("addVehicle")){//vehicle type, name, daily rate
+          controller.addVehicle(ui[1],ui[2],Float.parseFloat(ui[3]));
+        } else if (ui[0].equals("updateVehicle")) {
+          controller.updateVehicle();
+        } else if (ui[0].equals("rent")) {// name and vehicle id
+          controller.rent(ui[1], Integer.parseInt(ui[2]), false);
+        } else if (ui[0].equals("deposit")){// name e value
+          controller.deposit(ui[1],Float.parseFloat(ui[2]));
+        }else if (ui[0].equals("dailyRate")){
+          controller.dailyRateUpdate();
+        }else if (ui[0].equals("returnVehicle")){// name
+          controller.returnVehicle(ui[1]);
+        }else if (ui[0].equals("tow")){// name
+          controller.tow(ui[1]);
+        }else if (ui[0].equals("clientsRenting")){
+          controller.listClientsRenting();
         }        
         else {
-          System.out.println("fail: comando invalido");
+          System.out.println("fail: command not found");
         }
     }
     scanner.close();
