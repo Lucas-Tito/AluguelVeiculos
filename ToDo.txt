@@ -7,5 +7,3 @@ avoid getters and setters (all classes)
 change getAccount to a method that already modify balance
 
 ONLY GLOBAL STORE DATA IS BEING USED
-
-(i really should search before coding) License type AB doesn't exist

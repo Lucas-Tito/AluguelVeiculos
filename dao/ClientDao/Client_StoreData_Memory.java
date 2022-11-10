@@ -1,7 +1,6 @@
 package dao.ClientDao;
 
 import Client.Client;
-import dao.StoreData;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -14,9 +13,6 @@ public class Client_StoreData_Memory {
   // File fileCli = new File("clientes.txt");
   // File fileVeic = new File("veiculos.txt");
 
-  public ArrayList<Client> getClients(){
-    return clients;
-  }
 
   //se o cliente não existir e não for de menor
   //a conta faz parte dos atributos de clientToAdd
@@ -160,6 +156,18 @@ public class Client_StoreData_Memory {
 
   }
 
+
+  public int findClientRentingVehicle(int vehicleId){
+    int clientId = -1;
+
+    for(int i=0; i<clients.size(); i++)
+      if(clients.get(i).getRentedVehicle() == vehicleId){
+        clientId = i;
+        break;
+      }
+
+    return clientId;
+  }
 
 
 }

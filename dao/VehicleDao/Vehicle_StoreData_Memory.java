@@ -3,7 +3,6 @@ package dao.VehicleDao;
 import Vehicle.Bike;
 import Vehicle.Car;
 import Vehicle.Vehicle;
-import dao.StoreData;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,16 +12,11 @@ import java.util.Scanner;
 
 public class Vehicle_StoreData_Memory {
   ArrayList<Vehicle> vehicles = new ArrayList<>();
-  StoreData mngData = new StoreData();
-  File fileVeic = new File("vehicles.txt");
+  File vehiclesFile = new File("vehicles.txt");
   int nextVehicleId = 0;
 
   Scanner scanner = new Scanner(System.in);
 
-
-  public ArrayList<Vehicle> getVeiculos(){
-    return vehicles;
-  }
 
   public Vehicle getVehicle(int index){
     return vehicles.get(index);
@@ -48,6 +42,7 @@ public class Vehicle_StoreData_Memory {
   }
 
 
+  //this needs to update the vehicles ids
   public void removeVehicle(int idToRemove){
 
     int vehicleId = searchVeic(idToRemove);
@@ -134,6 +129,19 @@ public class Vehicle_StoreData_Memory {
 
   }
 
+  public int firstOccurrenceRentedVehicle(){
+    int vehicleId = -1;
+
+    for(int i = 0; i< vehicles.size(); i++)
+      if(vehicles.get(i).getIsRented()){
+        vehicleId=i;
+        break;
+      }
+
+
+
+    return vehicleId;
+  }
 
   public int searchFreeVehicle(){
     int vehicleId = -1;
@@ -152,7 +160,7 @@ public class Vehicle_StoreData_Memory {
     
     int nextId = -1;
     
-    try (Scanner veicStream = new Scanner(fileVeic);)
+    try (Scanner veicStream = new Scanner(vehiclesFile);)
         {
           while(veicStream.hasNext()) { 
             nextId = veicStream.nextInt();

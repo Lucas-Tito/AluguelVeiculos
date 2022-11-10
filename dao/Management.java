@@ -2,10 +2,15 @@ package dao;
 
 import Client.Client;
 import Vehicle.Vehicle;
+import Vehicle.Car;
+import Vehicle.Bike;
 import dao.ClientDao.Client_StoreData_Memory;
 import dao.VehicleDao.Vehicle_StoreData_Memory;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Management {
@@ -14,7 +19,6 @@ public class Management {
 
   Vehicle_StoreData_Memory vehicle_memory = new Vehicle_StoreData_Memory();
 
-  StoreData global_file_management = new StoreData();
 
   String choice;
 
@@ -37,7 +41,7 @@ public void deposit(String clientName, float balance){
 
 }
 
-//CONVERSAR SOBRE IMPLEMENTAR DE MANEIRA QUE SEJA POSSÍVEL FICAR COM CONTA NEGATIVA
+//ToDo: Account can't be negative the way the software is currently implemented
 public void dailyRateUpdate(){
 
   ArrayList<Client> clientsRenting = client_memory.getClientsRenting();
@@ -55,7 +59,7 @@ public void dailyRateUpdate(){
  }
 
 
-  public void listClientsRenting(){  // implementar: SE NÃO ACHOU NENHUM PRINTAR ERRO
+  public void listClientsRenting(){  //ToDo: if none found, print a error or a warning
     String show = "";
 
     ArrayList<Client> clientsRenting = client_memory.getClientsRenting();
@@ -119,8 +123,7 @@ public void dailyRateUpdate(){
         }
 
         vehicle_memory.removeVehicle(vehicleId);
-        //Try not to use getAll
-        global_file_management.updateIds(vehicle_memory.getVeiculos(), client_memory.getClients());
+
       }
       else
         System.out.println("fail: client don't have tow plan");
@@ -198,6 +201,58 @@ public void dailyRateUpdate(){
     }
     else
       System.out.println("fail: client doesn't exists");
+  }
+
+
+
+  public void fileDataToMemory(ArrayList<Client> clientsIn, ArrayList<Vehicle> vehiclesIn){//file to memory
+    File clientsFile = new File("Client/clientes.txt");
+
+    try (Scanner clientStream = new Scanner(clientsFile);){
+      while(clientStream.hasNext()) {
+        String nome = clientStream.next();
+        int age = clientStream.nextInt();
+        String driverLicenseType = clientStream.next();
+        int rentedCarId = clientStream.nextInt();
+        boolean hasTow = clientStream.nextBoolean();
+        String balance = clientStream.next();
+
+        clientsIn.add(new Client(nome, age, driverLicenseType, rentedCarId, hasTow, Float.valueOf(balance)));
+        clientStream.nextLine(); // clear buffer before next readLine
+      }
+    }
+    catch(InputMismatchException e) {
+      System.out.println("Invalid Input");
+    }
+    catch(FileNotFoundException e) {
+      System.out.println("\nWarning: There aren't any client data");
+    }
+
+    File vehiclesFile = new File("Vehicle/veiculos.txt");
+
+    try (Scanner vehiclesStream = new Scanner(vehiclesFile);){
+
+      while(vehiclesStream.hasNext()) {
+        int id = vehiclesStream.nextInt();
+        String type = vehiclesStream.next();
+        String name = vehiclesStream.next();
+        String dailyRent = vehiclesStream.next();
+        boolean rented = vehiclesStream.nextBoolean();
+
+        if(type.equals("moto")|| type.equals("Moto"))
+          vehiclesIn.add(new Bike(id, name, Float.parseFloat(dailyRent), rented));
+        else
+          vehiclesIn.add(new Car(id, name, Float.parseFloat(dailyRent), rented));
+
+        vehiclesStream.nextLine(); // clear buffer before next readLine
+      }
+    }
+    catch(InputMismatchException e){
+      System.out.println("Invalid Input");
+    }
+    catch(FileNotFoundException e){
+      System.out.println("\nWarning: There aren't any vehicle data");
+    }
   }
 
 }

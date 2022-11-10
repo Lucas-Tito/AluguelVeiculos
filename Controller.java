@@ -2,7 +2,6 @@ import Client.Client;
 import Vehicle.Vehicle;
 import dao.ClientDao.Client_StoreData_Memory;
 import dao.Management;
-import dao.StoreData;
 import dao.VehicleDao.Vehicle_StoreData_Memory;
 
 public class Controller {
@@ -73,5 +72,11 @@ public class Controller {
 
   public void listClientsRenting(){
     management.listClientsRenting();
+  }
+
+
+
+  public void fileDataToMemory(){
+    //mngData.fileDataToMemory();
   }
 }

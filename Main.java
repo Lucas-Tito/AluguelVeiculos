@@ -1,6 +1,4 @@
 import Client.Client;
-import dao.Management;
-import dao.StoreData;
 
 import java.util.Scanner;
 
@@ -8,7 +6,7 @@ class Main {
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
     Controller controller = new Controller();
-    mngData.fileDataToArray(g.getClients(),g.getVeiculos());
+    controller.fileDataToMemory();
 
     while (true) {
         String line = scanner.nextLine();
@@ -23,7 +21,7 @@ class Main {
         } else if (ui[0].equals("listClients")) {
           controller.listClients();
         } else if (ui[0].equals("updateClient")){
-          g.editCliente();
+          //g.editClient();
         } else if (ui[0].equals("listVehicles")){
           controller.listVehicles();
         } else if (ui[0].equals("removeVehicle")) {//id
@@ -31,7 +29,7 @@ class Main {
         } else if (ui[0].equals("addVehicle")){//vehicle type, name, daily rate
           controller.addVehicle(ui[1],ui[2],Float.parseFloat(ui[3]));
         } else if (ui[0].equals("updateVehicle")) {
-          controller.updateVehicle();
+          //controller.updateVehicle();
         } else if (ui[0].equals("rent")) {// name and vehicle id
           controller.rent(ui[1], Integer.parseInt(ui[2]), false);
         } else if (ui[0].equals("deposit")){// name e value
